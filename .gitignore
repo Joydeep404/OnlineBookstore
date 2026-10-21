@@ -1,0 +1,15 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.mdf
+*.ldf
+App_Data/*.mdf
+App_Data/*.ldf
+*.user[Bb]in/
+[Oo]bj/
+.vs/
+*.mdf
+*.ldf
+App_Data/*.mdf
+App_Data/*.ldf
+*.user

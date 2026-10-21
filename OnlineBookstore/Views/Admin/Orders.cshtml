@@ -1,0 +1,41 @@
+﻿@model List<OnlineBookstore.Models.Order>
+@{ ViewBag.Title = "Order Management"; }
+
+<div class="container mt-4">
+    <h2>📦 Order Management</h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No orders found.</div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>#@order.OrderId</td>
+                        <td>@order.User.FullName (@order.User.Username)</td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>
+                            <span class="label label-@(order.Status == "Pending" ? "warning" : "success")">
+                                @order.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

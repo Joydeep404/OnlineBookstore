@@ -1,0 +1,52 @@
+﻿@model List<OnlineBookstore.Models.User>
+@{ ViewBag.Title = "User Management"; }
+
+<div class="container mt-4">
+    <h2>👥 User Management</h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No users registered.</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td><strong>@user.Username</strong></td>
+                        <td>@user.Email</td>
+                        <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            @if (user.Username == "admin")
+                            {
+                                <span class="text-muted">System Account</span>
+                            }
+                            else
+                            {
+                                <form action="@Url.Action("DeleteUser", "Admin")" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@user.UserId" />
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete user @user.Username? This cannot be undone.');">
+                                        Delete
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

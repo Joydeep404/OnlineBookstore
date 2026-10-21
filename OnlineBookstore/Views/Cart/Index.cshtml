@@ -1,0 +1,62 @@
+﻿@model List<OnlineBookstore.Models.CartItem>
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<div class="container mt-4">
+    <h2>🛒 Your Shopping Cart</h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">Your cart is empty.</div>
+        @Html.ActionLink("Continue Shopping", "Index", "Home", null, new { @class = "btn btn-primary" })
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.ImageUrl" style="width:50px; height:50px; object-fit:cover;" class="mr-2" />
+                            @item.Title
+                        </td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>
+                            @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                <input type="hidden" name="bookId" value="@item.BookId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="10" class="form-control mr-1" style="width:70px;" />
+                                <button type="submit" class="btn btn-sm btn-secondary">Update</button>
+                            }
+                        </td>
+                        <td>@((item.Price * item.Quantity).ToString("C"))</td>
+                        <td>
+                            @Html.ActionLink("Remove", "Remove", "Cart", new { bookId = item.BookId }, new { @class = "btn btn-sm btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-right mt-3">
+            <h4><strong>Grand Total: @ViewBag.Total.ToString("C")</strong></h4>
+            @Html.ActionLink("Continue Shopping", "Index", "Home", null, new { @class = "btn btn-secondary" })
+            @using (Html.BeginForm("CheckoutAddress", "Cart", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+            }
+        </div>
+    }
+</div>

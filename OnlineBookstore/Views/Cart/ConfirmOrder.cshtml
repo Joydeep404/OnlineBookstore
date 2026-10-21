@@ -1,0 +1,44 @@
+﻿@model List<OnlineBookstore.Models.CartItem>
+@{
+    ViewBag.Title = "Order Confirmation";
+}
+<div class="container mt-4">
+    <h2>✅ Order Confirmation</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Order Summary</h4>
+            <table class="table">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Quantity x @item.Price.ToString("C")</td>
+                    </tr>
+                }
+                <tr class="fw-bold">
+                    <td>Total</td>
+                    <td>@ViewBag.Total.ToString("C")</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h4>Delivery Address</h4>
+            @{
+                var addr = ViewBag.Address as OnlineBookstore.Models.CheckoutViewModel;
+            }
+            <p>
+                <strong>@addr.FullName</strong><br />
+                @addr.Address<br />
+                @addr.City @addr.PostalCode<br />
+                Phone: @addr.PhoneNumber
+            </p>
+            <p><strong>Payment:</strong> Cash on Delivery</p>
+        </div>
+    </div>
+    @using (Html.BeginForm("FinalizeOrder", "Cart", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Place Order</button>
+        @Html.ActionLink("Edit Address", "CheckoutAddress", "Cart", null, new { @class = "btn btn-secondary ms-2" })
+    }
+</div>

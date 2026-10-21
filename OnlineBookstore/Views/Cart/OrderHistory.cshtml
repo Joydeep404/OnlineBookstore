@@ -1,0 +1,38 @@
+﻿@model List<OnlineBookstore.Models.OrderHistoryItem>
+@{
+    ViewBag.Title = "Order History";
+}
+
+<div class="container mt-4">
+    <h2>📦 My Order History</h2>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">You haven't placed any orders yet.</div>
+        @Html.ActionLink("Browse Books", "Index", "Home", null, new { @class = "btn btn-primary" })
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var order in Model.GroupBy(o => o.OrderId))
+            {
+                var first = order.First();
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <h5>Order #@first.OrderId</h5>
+                        <span class="badge @(first.Status == "Pending" ? "badge-warning" : "badge-success")">@first.Status</span>
+                    </div>
+                    <p class="text-muted">Placed on: @first.OrderDate.ToString("MMM dd, yyyy")</p>
+                    <p><strong>Total: @first.TotalAmount.ToString("C")</strong></p>
+                    <p><strong>Payment: Cash on Delivery</strong></p>
+                    <ul>
+                        @foreach (var item in order)
+                        {
+                           <li>@item.Quantity x @item.Title (@item.UnitPrice.ToString("C") each)</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+</div>

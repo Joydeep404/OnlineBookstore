@@ -1,0 +1,48 @@
+﻿@model OnlineBookstore.Models.CheckoutViewModel
+@{
+    ViewBag.Title = "Delivery Address";
+}
+
+<div class="container mt-4">
+    <h2>📦 Delivery Address</h2>
+    <p>Please provide your delivery details for Cash on Delivery.</p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.FullName, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Address, new { @class = "form-label" })
+                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = 3 })
+                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.City, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                </div>
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.PostalCode, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Continue to Confirmation</button>
+        @Html.ActionLink("Back to Cart", "Index", "Cart", null, new { @class = "btn btn-secondary ms-2" })
+    }
+</div>

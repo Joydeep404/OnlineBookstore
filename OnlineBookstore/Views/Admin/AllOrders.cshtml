@@ -1,0 +1,89 @@
+﻿@model List<OnlineBookstore.Models.Order>
+@{ ViewBag.Title = "All Orders"; }
+
+<div class="container mt-4">
+    <h2>📦 All Orders</h2>
+
+    <!-- ✅ Date Filter Form -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            @using (Html.BeginForm("AllOrders", "Admin", FormMethod.Get, new { @class = "form-inline" }))
+            {
+                <div class="form-group me-2">
+                    <label class="me-1">From:</label>
+                    <input type="date" name="fromDate" value="@ViewBag.FromDate?.ToString(" yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="form-group me-2">
+                    <label class="me-1">To:</label>
+                    <input type="date" name="toDate" value="@ViewBag.ToDate?.ToString(" yyyy-MM-dd")" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="@Url.Action("AllOrders", "Admin")" class="btn btn-secondary ms-2">Clear</a>
+            }
+        </div>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No orders placed yet.</div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>#@order.OrderId</td>
+                        <td>@order.User.FullName (@order.User.Username)</td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>
+                            @if (order.Status == "Pending")
+                            {
+                                <span class="label label-warning">Pending</span>
+                            }
+                            else if (order.Status == "Shipped")
+                            {
+                                <span class="label label-success">Shipped</span>
+                            }
+                            else if (order.Status == "Cancelled")
+                            {
+                                <span class="label label-default">Cancelled</span>
+                            }
+                        </td>
+                        <td>
+                            @if (order.Status == "Pending")
+                            {
+                                using (Html.BeginForm("MarkAsShipped", "Admin", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    <input type="hidden" name="id" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-sm btn-info">Mark as Shipped</button>
+                                }
+                                using (Html.BeginForm("CancelOrder", "Admin", FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('Cancel this order?');" }))
+                                {
+                                    <input type="hidden" name="id" value="@order.OrderId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancel Order</button>
+                                }
+                            }
+                            <a href="@Url.Action("OrderDetails", "Admin", new { id = order.OrderId })"
+                               class="btn btn-sm btn-outline-secondary">
+                                View Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

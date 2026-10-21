@@ -1,0 +1,56 @@
+﻿@model List<OnlineBookstore.Models.Book>
+@{ ViewBag.Title = "Manage Books"; }
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📚 Manage Books</h2>
+        @Html.ActionLink("Add New Book", "CreateBook", "Admin", null, new { @class = "btn btn-success" })
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@book.ImageUrl"
+                             style="width:60px; height:80px; object-fit: cover;"
+                             onerror="this.src='https://via.placeholder.com/60x80?text=No+Image'" />
+                    </td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Category.Name</td>
+                    <td>@book.Price.ToString("C")</td>
+                    <td>@book.Stock</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditBook", "Admin", new { id = book.BookId }, new { @class = "btn btn-sm btn-warning" })
+                        @using (Html.BeginForm("DeleteBook", "Admin", FormMethod.Post, new { style = "display:inline;" }))
+                        {
+                            <input type="hidden" name="id" value="@book.BookId" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this book?')">
+                                Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

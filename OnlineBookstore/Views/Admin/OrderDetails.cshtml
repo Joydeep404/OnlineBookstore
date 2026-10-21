@@ -1,0 +1,31 @@
+﻿@model OnlineBookstore.Models.Order
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<div class="container mt-4">
+    <h2>📋 Order #@Model.OrderId Details</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h4>📦 Ordered Items</h4>
+            @foreach (var item in ViewBag.OrderDetails as List<OnlineBookstore.Models.OrderItemDetail>)
+            {
+                <p>@item.Quantity x @item.Title (@item.UnitPrice.ToString("C"))</p>
+            }
+        </div>
+        <div class="col-md-6">
+            <h4>📍 Delivery Address</h4>
+            <p>
+                <strong>@Model.FullName</strong><br />
+                @Model.Address<br />
+                @Model.City @Model.PostalCode<br />
+                Phone: @Model.PhoneNumber
+            </p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Total:</strong> @Model.TotalAmount.ToString("C")</p>
+        </div>
+    </div>
+
+    <a href="@Url.Action("AllOrders", "Admin")" class="btn btn-secondary">← Back to Orders</a>
+</div>
